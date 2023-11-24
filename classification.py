@@ -5,15 +5,19 @@ import numpy as np
 import keras as keras
 import librosa
 import math
+import subprocess
 
+
+subprocess.run(["python", "sample.py"])
 # Path to the trained model
 MODEL_PATH = "Music_Genre_11_CNN.h5"
 
 # Path to the folder containing the music files
-MUSIC_FOLDER = "resampled"
+MUSIC_FOLDER = "classify"
 
 # Path to the destination folder for each genre
 DESTINATION_FOLDER = "predictn"
+
 
 # Load the trained model
 model = keras.models.load_model(MODEL_PATH)
@@ -65,6 +69,8 @@ for genre_folder in genre_dict.values():
     folder_path = os.path.join(DESTINATION_FOLDER, genre_folder)
     os.makedirs(folder_path, exist_ok=True)
 
+
+
 # Iterate through the music files in the folder
 for filename in os.listdir(MUSIC_FOLDER):
     file_path = os.path.join(MUSIC_FOLDER, filename)
@@ -109,5 +115,7 @@ for filename in os.listdir(MUSIC_FOLDER):
         # Move the file to the predicted genre folder
         destination_path = os.path.join(genre_folder_path, filename)
         shutil.copy(file_path, destination_path)
+    os.remove(file_path)
+
 
     print(f"Moved '{filename}' to '{predicted_genre}' folders.")
